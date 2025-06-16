@@ -19,6 +19,7 @@ INSTAGRAM_API_URL = "https://graph.facebook.com/v23.0"
 VECTOR_DB_URL = os.getenv("VECTOR_DB_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+
 # --------- Models ---------
 class IngestCommentsRepliesRequest(BaseModel):
     tenantId: str
@@ -31,6 +32,12 @@ class GenerateReplyRequest(BaseModel):
     accountId: str
     postId: str
     commentText: str
+
+class GenerateCaptionRequest(BaseModel):
+    tenantId: str
+    accountId: str
+    imageDescription: str 
+
 
 # --------- Helper Functions ---------
 def set_tenant(tenant_id: str):
@@ -72,6 +79,7 @@ def format_comment_thread(comment_text: str, replies: list):
         if reply_text:
             formatted += f"- {reply_text}\n"
     return formatted
+
 
 # --------- API Endpoints ---------
 
@@ -200,7 +208,62 @@ Please be precise because this is a comment reply.
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/health", tags=["Ingestion"])
+@app.post("/generate-caption", tags=["Caption Generation"])
+async def generate_caption(request: GenerateCaptionRequest):
+    """Generate a personalized Instagram caption for a new post using RAG."""
+    try:
+        set_tenant(request.tenantId)
+
+        SIMILARITY_THRESHOLD = 0.7  # Can be tuned
+
+        # Init vector store
+        store = PGVector(
+            collection_name="vector.embeddings",
+            connection_string=VECTOR_DB_URL,
+            embedding_function=OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+        )
+
+        # Query relevant user data based on the new image's description
+        results_with_score = store.similarity_search_with_score(
+            query=request.imageDescription,
+            k=5
+        )
+
+        filtered_results = [doc for doc, score in results_with_score if score >= SIMILARITY_THRESHOLD]
+
+        if not filtered_results:
+            return {"caption": ""}
+
+        past_content = ""
+        for i, doc in enumerate(filtered_results, start=1):
+            past_content += f"{i}.\n{doc.page_content}\n\n"
+
+        # Build the prompt
+        prompt_text = f"""
+You are an assistant helping a business Instagram user create engaging and relevant captions.
+
+Here are some examples of past posts and comment threads from this user:
+{past_content}
+
+Now, the user is planning to post a new image. Here's a description of the image:
+
+"{request.imageDescription}"
+
+Generate a personalized, creative, and audience-relevant caption for this new Instagram post. Keep the caption short, expressive, and aligned with the user's past tone and themes.
+"""
+
+        chat_model = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
+        prompt = ChatPromptTemplate.from_template("{prompt}")
+        chain = prompt | chat_model
+
+        result = chain.invoke({"prompt": prompt_text})
+
+        return {"caption": result.content.strip()}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/health", tags=["Health Check"])
 async def health_check():
     """Check the health of the API."""
     return {"status": "healthy"}
