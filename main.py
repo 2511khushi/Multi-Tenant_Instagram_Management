@@ -1,12 +1,16 @@
 from fastapi import FastAPI
-from controllers import ingestion_controller, reply_controller, caption_controller
+from controllers.comment import router as comment_router
+from controllers.caption import router as caption_router
 
-app = FastAPI(title="Ingestion Worker API")
+app = FastAPI(title="Social Media Assistant API")
 
-app.include_router(ingestion_controller.router, tags=["Ingestion"])
-app.include_router(reply_controller.router, tags=["Reply Generation"])
-app.include_router(caption_controller.router, tags=["Caption Generation"])
+app.include_router(comment_router)
+app.include_router(caption_router)
 
-@app.get("/health", tags=["Health Check"])
+@app.get("/health", tags=["Health"])
 async def health_check():
     return {"status": "healthy"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

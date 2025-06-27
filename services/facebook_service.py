@@ -6,8 +6,7 @@ def fetch_comments(post_id: str, access_token: str):
         response = requests.get(url)
         response.raise_for_status()
         return response.json().get("data", [])
-    except Exception as e:
-        print(f"Error fetching comments: {e}")
+    except:
         return []
 
 def fetch_replies(comment_id: str, access_token: str):
@@ -16,6 +15,5 @@ def fetch_replies(comment_id: str, access_token: str):
         response = requests.get(url)
         response.raise_for_status()
         return response.json().get("data", [])
-    except Exception as e:
-        print(f"Error fetching replies: {e}")
+    except:
         return []

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 class IngestCommentsRepliesRequest(BaseModel):
     tenantId: str
@@ -15,4 +15,11 @@ class GenerateReplyRequest(BaseModel):
 class GenerateCaptionRequest(BaseModel):
     tenantId: str
     accountId: str
-    imageDescription: str
+    imageUrl: str
+
+class IngestPostCaptionAIRequest(BaseModel):
+    tenantId: str
+    accountId: str
+    postId: str
+    imageUrl: HttpUrl
+    caption: str
