@@ -16,3 +16,4 @@ def generate_image_description(image_url: str) -> str:
     ]
     response = vision_model.invoke(vision_prompt)
     return response.content.strip()
+
