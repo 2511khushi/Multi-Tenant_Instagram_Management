@@ -22,6 +22,7 @@ async def ingest_comments_replies(request: IngestCommentsRepliesRequest):
             comment_text = comment.get("text", "").strip()
             if not comment_text:
                 continue
+
             comment_id = comment.get("id", "")
             replies = facebook_service.fetch_replies(comment_id, request.accessToken)
 
@@ -29,13 +30,18 @@ async def ingest_comments_replies(request: IngestCommentsRepliesRequest):
                 reply_text = reply.get("text", "").strip()
                 if not reply_text:
                     continue
+
                 content = format_comment_reply_pair(comment_text, reply_text)
-                vector_store_service.add_document(store, content, {
+                
+                metadata = {
                     "tenant_id": request.tenantId,
                     "account_id": request.accountId,
                     "object_type": "comment_reply",
-                    "source_id": f"comment_{comment_id}"
-                })
+                    "source_post_id": request.postId,
+                    "source_comment_id": comment_id
+                }
+
+                vector_store_service.add_document(store, content, metadata)
                 count += 1
 
         return {"status": f"Processed {count} comment-reply pairs"}
