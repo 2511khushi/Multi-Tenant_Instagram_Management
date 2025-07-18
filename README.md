@@ -78,17 +78,17 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 ## Setup Instructions
 
 1. **Clone the repo**
-"git clone https://github.com/khushi2511/Multi-Tenant_Instagram_Managementt.git"
-"cd Multi-Tenant_Instagram_Management"
+   "git clone https://github.com/khushi2511/Multi-Tenant_Instagram_Managementt.git"
+   "cd Multi-Tenant_Instagram_Management"
 
 2. **Install dependencies**
-"pip install -r requirements.txt"
+   "pip install -r requirements.txt"
 
 3. **Configure .env**
-Create a .env file with the following:
-"OPEN_API_KEY=your_openai_key"
-"VECTOR_DB_URL=your_pgvector_connection_string"
-"IG_ACCESS_TOKEN=your_facebook_graph_access_token"
+   Create a .env file with the following:
+   "OPEN_API_KEY=your_openai_key"
+   "VECTOR_DB_URL=your_pgvector_connection_string"
+   "IG_ACCESS_TOKEN=your_facebook_graph_access_token"
 
 4. **Run the API**
-"uvicorn main:app --reload"
+   "uvicorn main:app --reload"
