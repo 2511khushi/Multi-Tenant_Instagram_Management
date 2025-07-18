@@ -41,10 +41,15 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 - **Instagram Graph API** – Access to Instagram data
 - **Uvicorn** – Server for deploying FastAPI app     
 
+
 ## Folder Structure
 
+```
+.
 ├── main.py
 ├── database.py
+├── requirements.txt
+├── README.md
 ├── config/
 │   └── settings.py
 ├── controllers/
@@ -64,10 +69,9 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 ├── utils/
 │   ├── formatter.py
 │   └── loader.py
-├── models/
-│   └── schemas.py
-├── requirements.txt
-└── README.md
+└── models/
+    └── schemas.py
+```
 
 
 ## Example Use Cases
