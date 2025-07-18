@@ -29,8 +29,3 @@ class IngestDocumentsRequest(BaseModel):
     tenantId: str
     accountId: str
     documents: List[HttpUrl] 
-
-class QueryModel(BaseModel):
-    question: str
-    accountId: str
-    tenantId: str
