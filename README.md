@@ -42,13 +42,13 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 - **Uvicorn** – Server for deploying FastAPI app     
 
 ## Folder Structure
-.
-├── main.py             
-├── database.py            
+
+├── main.py
+├── database.py
 ├── config/
-│   └── settings.py        
-├── controllers/           
-│   ├── caption/            
+│   └── settings.py
+├── controllers/
+│   ├── caption/
 │   │   ├── ingest.py
 │   │   └── generate_caption.py
 │   ├── comment/
@@ -56,16 +56,18 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 │   │   └── generate_reply.py
 │   └── documents/
 │       └── ingest.py
-├── services/               
+├── services/
 │   ├── facebook_service.py
 │   ├── vision_service.py
 │   ├── vector_store_service.py
 │   └── split_document.py
-├── utils/              
+├── utils/
 │   ├── formatter.py
 │   └── loader.py
 ├── models/
-│   └── schemas.py  
+│   └── schemas.py
+├── requirements.txt
+└── README.md
 
 
 ## Example Use Cases
@@ -77,18 +79,27 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 
 ## Setup Instructions
 
-1. **Clone the repo**
-   "git clone https://github.com/khushi2511/Multi-Tenant_Instagram_Managementt.git"
-   "cd Multi-Tenant_Instagram_Management"
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/khushi2511/Multi-Tenant_Instagram_Management.git
+   cd Multi-Tenant_Instagram_Management
+   ```
 
 2. **Install dependencies**
-   "pip install -r requirements.txt"
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. **Configure .env**
-   Create a .env file with the following:
-   "OPEN_API_KEY=your_openai_key"
-   "VECTOR_DB_URL=your_pgvector_connection_string"
-   "IG_ACCESS_TOKEN=your_facebook_graph_access_token"
+3. **Create and configure `.env` file**
 
-4. **Run the API**
-   "uvicorn main:app --reload"
+   Create a `.env` file in the root directory and add the following:
+   ```env
+   OPEN_API_KEY=your_openai_key
+   IG_ACCESS_TOKEN=your_facebook_graph_access_token
+   VECTOR_DB_URL=your_pgvector_connection_string
+   ```
+
+4. **Run the FastAPI app**
+   ```bash
+   uvicorn main:app --reload
+   ```
