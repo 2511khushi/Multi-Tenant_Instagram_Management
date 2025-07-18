@@ -1,7 +1,7 @@
 from langchain_core.documents import Document
 from langchain_community.vectorstores import PGVector
 from langchain_community.embeddings import OpenAIEmbeddings
-from config import VECTOR_DB_URL, OPENAI_API_KEY
+from config.settings import VECTOR_DB_URL, OPENAI_API_KEY
 
 def get_vector_store():
     return PGVector(

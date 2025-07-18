@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, text
-from config import VECTOR_DB_URL
+from config.settings import VECTOR_DB_URL
 
 def set_tenant(tenant_id: str):
     engine = create_engine(VECTOR_DB_URL)

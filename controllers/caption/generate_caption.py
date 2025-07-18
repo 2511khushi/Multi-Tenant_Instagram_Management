@@ -5,7 +5,7 @@ from services.vector_store_service import get_vector_store
 from database import set_tenant
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from config import OPENAI_API_KEY
+from config.settings import OPENAI_API_KEY
 
 router = APIRouter()
 
@@ -43,8 +43,8 @@ async def generate_caption(request: GenerateCaptionRequest):
             [f"- {doc.page_content}" for doc in business_context]
         )
 
-        # if not past_caption_text and not business_context_text:
-        #     return {"caption": ""}
+        if not past_caption_text and not business_context_text:
+            return {"caption": ""}
 
         prompt_text = f"""
 You are a creative assistant for a business Instagram account.

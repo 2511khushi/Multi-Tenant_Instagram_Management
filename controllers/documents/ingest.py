@@ -19,11 +19,8 @@ async def ingest_documents(request: IngestDocumentsRequest):
             try:
                 
                 content = load_document_from_url(str(url))
-
-                
                 chunks = split_document(content)
 
-                
                 for chunk in chunks:
                     metadata = {
                         "tenant_id": request.tenantId,

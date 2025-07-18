@@ -4,7 +4,7 @@ from services.vector_store_service import get_vector_store
 from database import set_tenant
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from config import OPENAI_API_KEY
+from config.settings import OPENAI_API_KEY
 
 router = APIRouter()
 
@@ -14,7 +14,6 @@ async def generate_reply(request: GenerateReplyRequest):
         set_tenant(request.tenantId)
         store = get_vector_store()
 
-        # Step 1: Perform similarity search
         results = store.similarity_search_with_score(
             request.commentText,
             k=10,
@@ -24,7 +23,6 @@ async def generate_reply(request: GenerateReplyRequest):
             }
         )
 
-        # Step 2: Separate relevant replies and relevant docs
         relevant_comment_replies = []
         relevant_docs = []
 
@@ -35,7 +33,6 @@ async def generate_reply(request: GenerateReplyRequest):
                 elif doc.metadata.get("object_type") == "uploaded_document":
                     relevant_docs.append(doc)
 
-        # Step 3: Build context strings
         past_threads = "\n\n".join([
             f"{i+1}. {doc.page_content}" for i, doc in enumerate(relevant_comment_replies)
         ])
@@ -47,7 +44,6 @@ async def generate_reply(request: GenerateReplyRequest):
         if not past_threads and not business_context:
             return {"reply": ""}
 
-        # Step 4: Prepare final prompt
         prompt_text = f"""
 You are an assistant for a business Instagram account.
 
@@ -62,7 +58,6 @@ Relevant past comment-reply examples:
 Based on the above context and examples, write a precise, helpful, and business-relevant reply to this comment.
 """
 
-        # Step 5: Call OpenAI model
         model = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
         prompt = ChatPromptTemplate.from_template("{prompt}")
         chain = prompt | model
