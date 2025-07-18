@@ -85,7 +85,7 @@ It supports seamless onboarding of new clients and continuous updates to ensure 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/khushi2511/Multi-Tenant_Instagram_Management.git
+   git clone https://github.com/2511khushi/Multi-Tenant_Instagram_Management.git
    cd Multi-Tenant_Instagram_Management
    ```
 
