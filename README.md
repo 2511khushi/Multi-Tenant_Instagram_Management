@@ -1,4 +1,4 @@
-# Multi-Tenant_Instagram_Management
+# Multi-Tenant Instagram Management System
 
 A scalable FastAPI-based backend built to assist digital marketing teams and content agencies in automating Instagram content generation, reply formulation and document-driven captioning using Multimodal GenAI(GPT-4o) and Vector Databases.
 
